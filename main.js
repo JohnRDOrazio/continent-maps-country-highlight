@@ -15,7 +15,7 @@ miniMap.boxZoom.disable();
 miniMap.keyboard.disable();
 miniMap.dragging.disable();
 
-const mapHighLightStyle = {
+const mapHighlightStyle = {
     weight: 1,
     opacity: 1.0,
     color: 'darkgreen',
@@ -23,7 +23,7 @@ const mapHighLightStyle = {
     fillOpacity: 0.5
 };
 
-const miniMapHighLightStyle = {
+const miniMapHighlightStyle = {
     weight: 1,
     opacity: 1.0,
     color: 'darkgreen',
@@ -38,25 +38,74 @@ const tooltip = L.tooltip([0,0], {
     className: "custom-tooltip" // Custom styling
 }).addTo(miniMap);
 
-const miniMapElement = document.getElementById('miniMap');
-const rect = miniMapElement.getBoundingClientRect();
-const topLeftPixelCoords = {
-    x: rect.left,
-    //y: rect.top + rect.height / 2
-    y: rect.top + 1
-};
-const bottomLeftPixelCoords = {
-    x: rect.left,
-    //y: rect.top + rect.height / 2
-    y: rect.bottom - 1
-};
+const scaleControl = L.control.scale().addTo(miniMap);
 
-// Function to reposition at top center
+const lineLayer = L.polyline([[0, 0], [0, 0]], {
+    color: 'gray',
+    weight: 1,
+    opacity: 1
+}).addTo(map);
+
+const miniMapElement = document.getElementById('miniMap');
+
+const zoomThreshold = new Map([
+    ['Americas', 4.0],
+    ['Europe', 4.75],
+    ['Asia', 4.0],
+    ['Africa', 4.0],
+    ['Oceania', 4.0]
+]);
+
+let geoJsonData;
+let mapGeoJsonLayer;
+let miniMapGeoJsonLayer;
+
+function miniMapPixelCoordinates(corner, side='left') {
+    const rect = miniMapElement.getBoundingClientRect();
+    switch (corner) {
+        case 'topLeft':
+            return {
+                x: rect.left + (['top', 'bottom'].includes(side) ? 1 : 0),
+                y: rect.top + (['left', 'right'].includes(side) ? 1 : 0)
+            };
+        case 'bottomLeft':
+            return {
+                x: rect.left + (['top', 'bottom'].includes(side) ? 1 : 0),
+                y: rect.bottom //- (['left', 'right'].includes(side) ? 1 : 0)
+            };
+        case 'topRight':
+            return {
+                x: rect.right - (['top', 'bottom'].includes(side) ? 1 : 0),
+                y: rect.top + (['left', 'right'].includes(side) ? 1 : 0)
+            };
+        case 'bottomRight':
+            return {
+                x: rect.right - (['top', 'bottom'].includes(side) ? 1 : 0),
+                y: rect.bottom //- (['left', 'right'].includes(side) ? 1 : 0)
+            }
+        default:
+            return null;
+    }
+}
+
+
+// Function to reposition the tooltip at top center of the minimap
 function positionTooltipAtTopCenter(map) {
     let bounds = map.getBounds();
     tooltip.setLatLng([bounds.getNorth(), bounds.getCenter().lng]);
 }
 
+function positionMiniMap() {
+    const currentContinent = document.querySelector('[name="continents"]:checked').value;
+    switch (currentContinent) {
+        case 'Europe':
+            miniMapElement.style.right = '200px';
+            break;
+    }
+}
+
+// Function to center minimap on Highlighted feature / country and zoom accordingly,
+// and when finished, reposition tooltip to top center
 function fitBoundsAsync(map, bounds, options = {}) {
     return new Promise(resolve => {
         map.once("zoomend moveend", () => {
@@ -67,34 +116,55 @@ function fitBoundsAsync(map, bounds, options = {}) {
     });
 }
 
-const lineLayer = L.polyline([[0, 0], [0, 0]], {
-    color: 'gray',
-    weight: 1,
-    opacity: 1
-}).addTo(map);
+// Function to load and display GeoJSON data
+function loadGeoJson(url) {
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            let russiaOrFiji = data.features.find(feature => (feature.properties.name_it === 'Russia' || feature.properties.name_it === 'Figi'));
+            if (russiaOrFiji) {
+                russiaOrFiji.geometry.coordinates.forEach(polygon => {
+                    polygon.forEach(line => {
+                        line.forEach(section => {
+                            if (section[0] < 0) {
+                                section[0] += 360;
+                            }
+                        });
+                    });
+                });
+            }
+            geoJsonData = data;
 
-// Add GeoJSON data to the main map
-let mapGeoJsonLayer;
-let geoJsonData;
-let miniMapGeoJsonLayer;
-fetch('geojson/Americas.json')
-    .then(response => response.json())
-    .then(data => {
-        geoJsonData = data;
-        mapGeoJsonLayer = L.geoJson(geoJsonData, {
-            style: style,
-            onEachFeature: onEachFeature
-        }).addTo(map);
-        miniMapGeoJsonLayer = L.geoJson(geoJsonData, {
-            style: style('miniMap')
-        }).addTo(miniMap);
-        L.control.scale().addTo(miniMap);
-        map.fitBounds(mapGeoJsonLayer.getBounds()).setZoom(2.3);
-        miniMap.fitBounds(miniMapGeoJsonLayer.getBounds()).setZoom(2.3);
-    })
-    .catch(error => {
-        console.error('Error loading GeoJSON on the Main Map:', error);
-    });
+            // ✅ Remove previous layers if they exist
+            if (mapGeoJsonLayer && map.hasLayer(mapGeoJsonLayer)) {
+                map.removeLayer(mapGeoJsonLayer);
+            }
+            if (miniMapGeoJsonLayer && miniMap.hasLayer(miniMapGeoJsonLayer)) {
+                miniMap.removeLayer(miniMapGeoJsonLayer);
+            }
+
+            // ✅ Add new GeoJSON layer to the main map
+            mapGeoJsonLayer = L.geoJson(geoJsonData, {
+                style,
+                onEachFeature: onEachFeature
+            }).addTo(map);
+
+            // ✅ Add new GeoJSON layer to the minimap
+            miniMapGeoJsonLayer = L.geoJson(geoJsonData, {
+                style: style('miniMap')
+            }).addTo(miniMap);
+
+            // ✅ Fit bounds to the new dataset
+            const mapBounds = mapGeoJsonLayer.getBounds();
+            const miniMapBounds = miniMapGeoJsonLayer.getBounds();
+            map.fitBounds(mapBounds);
+            miniMap.fitBounds(miniMapBounds);
+            positionMiniMap();
+        })
+        .catch(error => {
+            console.error('Error loading GeoJSON:', error);
+        });
+}
 
 
 // Style for countries on the main map
@@ -117,27 +187,46 @@ function style(whichMap) {
 
 // Highlight a country on hover
 async function highlightFeature(e) {
-    const layer = e.target;
+    let layer;
+    let isMouseOverEvent = false;
+    if (e.hasOwnProperty('target')) {
+        console.log(e);
+        layer = e.target;
+        isMouseOverEvent = e.originalEvent.type === 'mouseover';
+    } else {
+        layer = e;
+    }
+
     const countryName = layer.feature.properties.name_it;
+    const currentContinent = document.querySelector('[name="continents"]:checked').value;
 
-    layer.setStyle(mapHighLightStyle);
+    // Reset styles
+    mapGeoJsonLayer.resetStyle();
 
+    // Highlight only the current country
+    layer.setStyle(mapHighlightStyle);
+
+    // Fit minimap to the highlighted country
     const miniMapLayer = miniMapGeoJsonLayer.getLayers().find(layer => layer.feature.properties.name_it === countryName);
     console.log(`miniMapLayer: ${miniMapLayer}`);
     let finalZoom = await fitBoundsAsync(miniMap, miniMapLayer.getBounds(), { padding: [50, 50] });
-    console.log(`finalZoom: ${finalZoom}`);
 
-    if (finalZoom > 4.0) {
+    if (isMouseOverEvent) {
+        document.querySelector('#miniMapZoomValue').textContent = finalZoom;
+    }
+
+    if (finalZoom > zoomThreshold.get(currentContinent)) {
         miniMapElement.style.visibility = 'visible';
         tooltip.setContent(countryName);
-        const topLeftLatLng = map.containerPointToLatLng(topLeftPixelCoords, map.getZoom());
-        const bottomLeftLatLng = map.containerPointToLatLng(bottomLeftPixelCoords, map.getZoom());
+        const topLeftLatLng = map.containerPointToLatLng(miniMapPixelCoordinates('topLeft', 'left'), map.getZoom());
+        const bottomLeftLatLng = map.containerPointToLatLng(miniMapPixelCoordinates('bottomLeft', 'left'), map.getZoom());
+        const layerCenterCoords = layer.getBounds().getCenter();
         lineLayer.setLatLngs([
-            [layer.getBounds().getCenter(), topLeftLatLng],
-            [layer.getBounds().getCenter(), bottomLeftLatLng]
+            [layerCenterCoords, topLeftLatLng],
+            [layerCenterCoords, bottomLeftLatLng]
         ]);
         miniMapGeoJsonLayer.resetStyle();
-        miniMapLayer.setStyle(miniMapHighLightStyle);
+        miniMapLayer.setStyle(miniMapHighlightStyle);
     } else {
         miniMapElement.style.visibility = 'hidden';
         lineLayer.setLatLngs([]);
@@ -171,51 +260,50 @@ function onEachFeature(feature, layer) {
     });
 }
 
-async function doHighlightFeature(layer, countryName, isoCode) {
-    // Reset styles
-    mapGeoJsonLayer.resetStyle(layer);
-
-    // Highlight only the current country
-    if (layer.feature.properties.name_it === countryName) {
-        layer.setStyle(mapHighLightStyle);
-
-        // Bring the layer to the front to ensure the highlight is visible
-        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-            layer.bringToFront();
-        }
-
-        const miniMapLayer = miniMapGeoJsonLayer.getLayers().find(layer => layer.feature.properties.name_it === countryName);
-        console.log(`miniMapLayer: ${miniMapLayer}`);
-        let finalZoom = await fitBoundsAsync(miniMap, miniMapLayer.getBounds(), { padding: [50, 50] });
-        console.log(`finalZoom: ${finalZoom}`);
-
-        if (finalZoom > 4.0) {
-            miniMapElement.style.visibility = 'visible';
-            tooltip.setContent(countryName);
-            positionTooltipAtTopCenter(miniMap);
-            const topLeftLatLng = map.containerPointToLatLng(topLeftPixelCoords, map.getZoom());
-            const bottomLeftLatLng = map.containerPointToLatLng(bottomLeftPixelCoords, map.getZoom());
-            lineLayer.setLatLngs([
-                [layer.getBounds().getCenter(), topLeftLatLng],
-                [layer.getBounds().getCenter(), bottomLeftLatLng]
-            ]);
-            miniMapGeoJsonLayer.resetStyle();
-            miniMapLayer.setStyle(miniMapHighLightStyle);
-        } else {
-            miniMapElement.style.visibility = 'hidden';
-            lineLayer.setLatLngs([]);
-        }
-    } else {
-        //layer.closeTooltip();
+function getCropForContinent() {
+    const currentContinent = document.querySelector('[name="continents"]:checked').value;
+    switch (currentContinent) {
+        case 'Europe':
+            return {
+                left: 750,
+                top: 0,
+                width: 1550,
+                height: 1600
+            }
+        case 'Asia':
+            return {
+                left: 850,
+                top: 200,
+                width: 1350,
+                height: 1200
+            };
+        case 'Africa':
+            return {
+                left: 850,
+                top: 200,
+                width: 1350,
+                height: 1200
+            };
+        case 'Americas':
+            return {
+                left: 775,
+                top: 75,
+                width: 1425,
+                height: 1450
+            };
+        case 'Oceania':
+            return {
+                left: 850,
+                top: 200,
+                width: 1350,
+                height: 1200
+            };
+        default:
+            return null;
     }
 }
 
-
 async function exportImages() {
-
-    const zip = new JSZip();
-    const totalCountries = geoJsonData.features.length;
-    const progressText = document.getElementById('progress');
 
     // ✅ Ensure user grants screen capture permission before proceeding
     let stream;
@@ -225,37 +313,45 @@ async function exportImages() {
         alert("Screen capture permission denied. Export canceled.");
         return;
     }
-
     const track = stream.getVideoTracks()[0];
     const imageCapture = new ImageCapture(track);
+    const zip = new JSZip();
+    const totalCountries = geoJsonData.features.length;
+    const progressText = document.getElementById('progress');
+    const toolbar = document.getElementById('toolbar');
+    const crop = getCropForContinent();
 
     let completed = 0;
+    let screenSharingActive = true;
+    let canvas = document.createElement("canvas");
+    let ctx = canvas.getContext("2d");
+    canvas.width = crop.width;
+    canvas.height = crop.height;
+    toolbar.style.visibility = 'hidden';
+
+    // ✅ Detect if the user stops screen sharing
+    track.addEventListener("ended", () => {
+        toolbar.style.visibility = 'visible';
+        console.warn("Screen sharing was interrupted by the user.");
+        screenSharingActive = false;
+    });
 
     for (let feature of geoJsonData.features) {
+        if (!screenSharingActive) break; // ✅ Exit loop if screen sharing stops
+
         const countryName = feature.properties.name_it;
         const isoCode = feature.properties.iso_a2;
 
         // ✅ Highlight feature & force Leaflet to update
-        mapGeoJsonLayer.eachLayer(layer => doHighlightFeature(layer, countryName, isoCode));
+        const layer = mapGeoJsonLayer.getLayers().find(layer => layer.feature.properties.name_it === countryName);
 
-        // ✅ Wait for styles to update using `requestAnimationFrame`
-        await new Promise(resolve => requestAnimationFrame(resolve));
+        await highlightFeature(layer);
+
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for styles to render
 
         // ✅ Capture updated screen
         const bitmap = await imageCapture.grabFrame();
-
-        // ✅ Define crop region (adjust these values)
-        const cropX = 850; // Left offset
-        const cropY = 200; // Top offset
-        const cropWidth = 1350;  // Adjust to crop width
-        const cropHeight = 1200; // Adjust to crop height
-
-        let canvas = document.createElement("canvas");
-        let ctx = canvas.getContext("2d");
-        canvas.width = cropWidth;
-        canvas.height = cropHeight;
-        ctx.drawImage(bitmap, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+        ctx.drawImage(bitmap, crop.left, crop.top, crop.width, crop.height, 0, 0, crop.width, crop.height);
 
         // ✅ Save to ZIP
         let imageData = canvas.toDataURL("image/png").split(',')[1]; // Get image base64 data
@@ -268,18 +364,31 @@ async function exportImages() {
     }
 
     track.stop(); // ✅ Stop screen capture
+    toolbar.style.visibility = 'visible';
 
     // ✅ Generate ZIP and trigger download
     zip.generateAsync({ type: "blob" }).then(function(content) {
-        saveAs(content, "Countries_Export.zip");
+        const currentContinent = document.querySelector('[name="continents"]:checked').value;
+        saveAs(content, `${currentContinent}_Export.zip`);
     });
     alert("Export complete! Downloading ZIP file.");
 }
 
 // ✅ Ensure function is only triggered when clicking the export button
 document.addEventListener('click', function (event) {
+    console.log('click event.target:', event.target);
     if (event.target.matches('#exportButton')) {
         exportImages();
     }
 });
 
+document.addEventListener('change', function (event) {
+    console.log('change event.target:', event.target);
+    if (event.target.matches('input[name="continents"]')) {
+        const selectedContinent = event.target.value;
+        loadGeoJson(`geojson/${selectedContinent}.json`);
+    }
+});
+
+// ✅ Initial load
+loadGeoJson('geojson/Americas.json');

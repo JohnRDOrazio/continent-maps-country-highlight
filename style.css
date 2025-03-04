@@ -40,21 +40,3 @@ body {
 .leaflet-tooltip:before {
     display: none !important;
 }
-
-#progress {
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    font-size: 16px;
-    text-align: center;
-}
-
-#exportButton {
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    font-size: 16px;
-    text-align: center;
-}

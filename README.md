@@ -16,3 +16,11 @@ This results in a final zip file that is downloaded, and the resulting images in
 
 Since the screen I was using had a resolution of 2560 width x 1600 height,
 the script crops the final images according to these dimensions, for a final image size of 1350 width x 1200 height (for the Americas).
+
+Russia was included in the Europe geojson data,
+I manually moved it to the Asia geojson data.
+
+Russia and Fiji have polygons that go beyond the 180 longitude limit,
+and leaflet renders them on the left side of the map rather than on the right,
+detaching them from the rest of the mainland,
+so the script adds 360 degrees to the longitude of the coordinates for those polygons.
