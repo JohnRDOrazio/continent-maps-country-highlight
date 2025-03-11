@@ -9,10 +9,10 @@ body {
     left: 0;
     bottom: 0;
     right: 0;
-    background: transparent;
+    background: white;
 }
 
-#miniMap {
+.miniMap {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -20,9 +20,11 @@ body {
     right: 250px;
     height: 250px;
     width: 400px;
-    background: transparent;
+    background: white;
     border: 1px solid black;
     visibility: hidden;
+    z-index: 500;
+    box-shadow: 15px 15px 15px rgba(0, 0, 0, 0.5);
 }
 
 .custom-tooltip {

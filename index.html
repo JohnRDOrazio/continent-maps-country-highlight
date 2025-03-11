@@ -12,7 +12,7 @@
 <body>
     <div id="mapsContainer">
         <div id="map"></div>
-        <div id="miniMap"></div>
+        <div id="miniMap" class="miniMap"></div>
     </div>
     <div class="d-flex justify-content-center align-items-center position-absolute bottom-0 ms-2" id="toolbar">
         <button id="exportButton" class="btn btn-primary me-2 rounded-0 rounded-top">Export Images</button>
@@ -28,8 +28,12 @@
             <input type="radio" class="btn-check" name="continents" id="oceaniaButton" value="Oceania" autocomplete="off" />
             <label class="btn btn-secondary" for="oceaniaButton" style="border-bottom-right-radius: 0;">Oceania</label>
         </div>
-        <p class="mb-0 me-4">Minimap current zoom: <span id="miniMapZoomValue"></span></p>
-        <p id="progress" class="mb-0">Progress: 0 / 0</p>
+        <p class="mb-0 me-4">Minimap current zoom: <span id="miniMapZoomValue" class="d-inline-block"></span></p>
+        <!-- <p id="progress" class="mb-0">Progress: 0 / 0</p> -->
+        <div class="btn-group" role="group" aria-label="Highlight group" id="highlightGroup">
+            <button id="highlightGroupButton" class="btn btn-primary" style="border-bottom-left-radius: 0;">Highlight predefined group</button>
+            <button id="clearHighlightsButton" class="btn btn-primary" style="border-bottom-right-radius: 0;" disabled>Clear all highlights</button>
+        </div>
     </div>
 
     <!-- Main Script -->
