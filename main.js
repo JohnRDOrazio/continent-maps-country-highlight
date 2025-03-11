@@ -102,7 +102,7 @@ const predefinedGroupMiniMaps = new Map([
         }]
     ])],
     ['Asia',     null],
-    ['Americas', new Map([ //176
+    ['Americas', new Map([
         ['Guatemala', (miniMapInstance) => {
             miniMapInstance.style.margin = 0;
             miniMapInstance.style.top = '80px';

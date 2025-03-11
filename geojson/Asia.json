@@ -20844,6 +20844,325 @@
                     ]
                 ]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "featurecla": "Admin-0 country",
+                "scalerank": 1,
+                "labelrank": 2,
+                "sovereignt": "Papua New Guinea",
+                "sov_a3": "PNG",
+                "adm0_dif": 0,
+                "level": 2,
+                "type": "Sovereign country",
+                "tlc": "1",
+                "admin": "Papua New Guinea",
+                "adm0_a3": "PNG",
+                "geou_dif": 0,
+                "geounit": "Papua New Guinea",
+                "gu_a3": "PNG",
+                "su_dif": 1,
+                "subunit": "Papua New Guinea",
+                "su_a3": "PN1",
+                "brk_diff": 0,
+                "name": "Papua New Guinea",
+                "name_long": "Papua New Guinea",
+                "brk_a3": "PN1",
+                "brk_name": "Papua New Guinea",
+                "brk_group": null,
+                "abbrev": "P.N.G.",
+                "postal": "PG",
+                "formal_en": "Independent State of Papua New Guinea",
+                "formal_fr": null,
+                "name_ciawf": "Papua New Guinea",
+                "note_adm0": null,
+                "note_brk": null,
+                "name_sort": "Papua New Guinea",
+                "name_alt": null,
+                "mapcolor7": 4,
+                "mapcolor8": 2,
+                "mapcolor9": 3,
+                "mapcolor13": 1,
+                "pop_est": 8776109,
+                "pop_rank": 13,
+                "pop_year": 2019,
+                "gdp_md": 24829,
+                "gdp_year": 2019,
+                "economy": "6. Developing region",
+                "income_grp": "4. Lower middle income",
+                "fips_10": "PP",
+                "iso_a2": "PG",
+                "iso_a2_eh": "PG",
+                "iso_a3": "PNG",
+                "iso_a3_eh": "PNG",
+                "iso_n3": "598",
+                "iso_n3_eh": "598",
+                "un_a3": "598",
+                "wb_a2": "PG",
+                "wb_a3": "PNG",
+                "woe_id": 23424926,
+                "woe_id_eh": 23424926,
+                "woe_note": "Exact WOE match as country",
+                "adm0_iso": "PN1",
+                "adm0_diff": null,
+                "adm0_tlc": "PN1",
+                "adm0_a3_us": "PNG",
+                "adm0_a3_fr": "PNG",
+                "adm0_a3_ru": "PNG",
+                "adm0_a3_es": "PNG",
+                "adm0_a3_cn": "PNG",
+                "adm0_a3_tw": "PNG",
+                "adm0_a3_in": "PNG",
+                "adm0_a3_np": "PNG",
+                "adm0_a3_pk": "PNG",
+                "adm0_a3_de": "PNG",
+                "adm0_a3_gb": "PNG",
+                "adm0_a3_br": "PNG",
+                "adm0_a3_il": "PNG",
+                "adm0_a3_ps": "PNG",
+                "adm0_a3_sa": "PNG",
+                "adm0_a3_eg": "PNG",
+                "adm0_a3_ma": "PNG",
+                "adm0_a3_pt": "PNG",
+                "adm0_a3_ar": "PNG",
+                "adm0_a3_jp": "PNG",
+                "adm0_a3_ko": "PNG",
+                "adm0_a3_vn": "PNG",
+                "adm0_a3_tr": "PNG",
+                "adm0_a3_id": "PNG",
+                "adm0_a3_pl": "PNG",
+                "adm0_a3_gr": "PNG",
+                "adm0_a3_it": "PNG",
+                "adm0_a3_nl": "PNG",
+                "adm0_a3_se": "PNG",
+                "adm0_a3_bd": "PNG",
+                "adm0_a3_ua": "PNG",
+                "adm0_a3_un": -99,
+                "adm0_a3_wb": -99,
+                "continent": "Oceania",
+                "region_un": "Oceania",
+                "subregion": "Melanesia",
+                "region_wb": "East Asia & Pacific",
+                "name_len": 16,
+                "long_len": 16,
+                "abbrev_len": 6,
+                "tiny": -99,
+                "homepart": 1,
+                "min_zoom": 0,
+                "min_label": 2.5,
+                "max_label": 7.5,
+                "label_x": 143.910216,
+                "label_y": -5.695285,
+                "ne_id": 1159321173,
+                "wikidataid": "Q691",
+                "name_ar": "بابوا غينيا الجديدة",
+                "name_bn": "পাপুয়া নিউগিনি",
+                "name_de": "Papua-Neuguinea",
+                "name_en": "Papua New Guinea",
+                "name_es": "Papúa Nueva Guinea",
+                "name_fa": "پاپوآ گینه نو",
+                "name_fr": "Papouasie-Nouvelle-Guinée",
+                "name_el": "Παπούα Νέα Γουινέα",
+                "name_he": "פפואה גינאה החדשה",
+                "name_hi": "पापुआ न्यू गिनी",
+                "name_hu": "Pápua Új-Guinea",
+                "name_id": "Papua Nugini",
+                "name_it": "Papua Nuova Guinea",
+                "name_ja": "パプアニューギニア",
+                "name_ko": "파푸아뉴기니",
+                "name_nl": "Papoea-Nieuw-Guinea",
+                "name_pl": "Papua-Nowa Gwinea",
+                "name_pt": "Papua-Nova Guiné",
+                "name_ru": "Папуа — Новая Гвинея",
+                "name_sv": "Papua Nya Guinea",
+                "name_tr": "Papua Yeni Gine",
+                "name_uk": "Папуа Нова Гвінея",
+                "name_ur": "پاپوا نیو گنی",
+                "name_vi": "Papua New Guinea",
+                "name_zh": "巴布亚新几内亚",
+                "name_zht": "巴布亞紐幾內亞",
+                "fclass_iso": "Admin-0 country",
+                "tlc_diff": null,
+                "fclass_tlc": "Admin-0 country",
+                "fclass_us": null,
+                "fclass_fr": null,
+                "fclass_ru": null,
+                "fclass_es": null,
+                "fclass_cn": null,
+                "fclass_tw": null,
+                "fclass_in": null,
+                "fclass_np": null,
+                "fclass_pk": null,
+                "fclass_de": null,
+                "fclass_gb": null,
+                "fclass_br": null,
+                "fclass_il": null,
+                "fclass_ps": null,
+                "fclass_sa": null,
+                "fclass_eg": null,
+                "fclass_ma": null,
+                "fclass_pt": null,
+                "fclass_ar": null,
+                "fclass_jp": null,
+                "fclass_ko": null,
+                "fclass_vn": null,
+                "fclass_tr": null,
+                "fclass_id": null,
+                "fclass_pl": null,
+                "fclass_gr": null,
+                "fclass_it": null,
+                "fclass_nl": null,
+                "fclass_se": null,
+                "fclass_bd": null,
+                "fclass_ua": null,
+                "filename": "PNG.geojson"
+            },
+            "geometry": {
+                "type": "MultiPolygon",
+                "coordinates": [
+                    [
+                        [
+                            [
+                                141.00021040259185,
+                                -2.60015105551566
+                            ],
+                            [
+                                142.73524661679147,
+                                -3.28915292726321
+                            ],
+                            [
+                                144.58397098203324,
+                                -3.861417738463416
+                            ],
+                            [
+                                145.27317955950997,
+                                -4.373737888205049
+                            ],
+                            [
+                                145.8297864117257,
+                                -4.876497897972683
+                            ],
+                            [
+                                145.981921828393,
+                                -5.465609226100043
+                            ],
+                            [
+                                147.64807335834757,
+                                -6.083659356310847
+                            ],
+                            [
+                                147.89110761941623,
+                                -6.614014580922343
+                            ],
+                            [
+                                146.97090538959486,
+                                -6.721656589386313
+                            ],
+                            [
+                                147.19187381407494,
+                                -7.388024183790023
+                            ],
+                            [
+                                148.08463585834932,
+                                -8.044108168167647
+                            ],
+                            [
+                                148.73410525939357,
+                                -9.104663588093764
+                            ],
+                            [
+                                149.30683515848443,
+                                -9.07143564213009
+                            ],
+                            [
+                                149.26663089416132,
+                                -9.514406019736029
+                            ],
+                            [
+                                150.03872846903425,
+                                -9.684318129111709
+                            ],
+                            [
+                                149.7387984560122,
+                                -9.872937106977048
+                            ],
+                            [
+                                150.80162763895913,
+                                -10.293686618697478
+                            ],
+                            [
+                                150.6905749859639,
+                                -10.582712904505925
+                            ],
+                            [
+                                150.02839318257583,
+                                -10.652476088099952
+                            ],
+                            [
+                                149.78231001200197,
+                                -10.393267103723923
+                            ],
+                            [
+                                148.92313764871727,
+                                -10.280922539921384
+                            ],
+                            [
+                                147.913018426708,
+                                -10.13044076908745
+                            ],
+                            [
+                                147.13544315001218,
+                                -9.492443536011983
+                            ],
+                            [
+                                146.56788089415056,
+                                -8.942554619994155
+                            ],
+                            [
+                                146.04848107318492,
+                                -8.067414239131281
+                            ],
+                            [
+                                144.74416792213805,
+                                -7.630128269077446
+                            ],
+                            [
+                                143.89708784400966,
+                                -7.915330498896296
+                            ],
+                            [
+                                143.28637576718432,
+                                -8.24549122480908
+                            ],
+                            [
+                                143.41391320208066,
+                                -8.983068942910982
+                            ],
+                            [
+                                142.62843143124417,
+                                -9.326820570516524
+                            ],
+                            [
+                                142.06825890520025,
+                                -9.159595635620022
+                            ],
+                            [
+                                141.03385176001382,
+                                -9.117892754760483
+                            ],
+                            [
+                                141.01705691951895,
+                                -5.859021905138071
+                            ],
+                            [
+                                141.00021040259185,
+                                -2.60015105551566
+                            ]
+                        ]
+                    ]
+                ]
+            }
         }
     ]
 }
